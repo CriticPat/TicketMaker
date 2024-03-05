@@ -3,7 +3,6 @@ Public Class LoginScreen
     Dim passwarn As String, userwarn As String
     Dim acceptpass As Boolean = False
     Dim acceptuser As Boolean = False
-    Private pfc As Object
 
     Private Sub LoginScreen_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'This function enables custom fonts for labels
@@ -23,17 +22,22 @@ Public Class LoginScreen
         txtPassword.Text = "Enter your password"
         txtPassword.ForeColor = Color.Gray
         txtPassword.Font = New Font(pfc.Families(0), 10, FontStyle.Regular)
+
     End Sub
     Private Sub lnlblRegister_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lnlblRegister.LinkClicked
-        Me.Close()
+        Me.Hide()
         UserManagement.Show()
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles txtUser.TextChanged, txtPassword.TextChanged
-
+        If txtPassword.TextLength >= 1 And Not txtPassword.Text = "Enter your password" Then
+            btnShowPass.Visible = True
+        Else
+            btnShowPass.Visible = False
+        End If
     End Sub
 
-    Private Sub Panel2_Paint(sender As Object, e As PaintEventArgs) Handles Panel2.Paint
+    Private Sub Panel2_Paint(sender As Object, e As PaintEventArgs) Handles pnlUser.Paint
 
     End Sub
 
@@ -80,7 +84,7 @@ Public Class LoginScreen
             ' Display the combined warning message
             MsgBox(warningMessage, MsgBoxStyle.OkOnly Or MsgBoxStyle.Exclamation, "Invalid Input")
         End If
-
+        txtPassword.PasswordChar = ""
     End Sub
     Private Sub txtUser_LostFocus(sender As Object, e As EventArgs) Handles txtUser.LostFocus
         ' Restore the watermark text if TextBox loses focus and is empty
@@ -102,17 +106,28 @@ Public Class LoginScreen
         If String.IsNullOrWhiteSpace(txtPassword.Text) Then
             txtPassword.Text = "Enter your password"
             txtPassword.ForeColor = Color.Gray
+            btnShowPass.Visible = False
+            txtPassword.PasswordChar = ""
+
         End If
     End Sub
 
     Private Sub btnShowPass_MouseDown(sender As Object, e As EventArgs) Handles btnShowPass.MouseDown
         txtPassword.PasswordChar = ""
-        btnShowPass.Image = Image.FromFile("C: user\source\repos\TicketMaker_CS206\TicketMaker_CS206\bin\Debug\Show.png")
+        btnShowPass.Image = My.Resources.Show
     End Sub
 
     Private Sub btnShowPass_MouseUp(sender As Object, e As EventArgs) Handles btnShowPass.MouseUp
         txtPassword.PasswordChar = "*"
-        btnShowPass.Image = Image.FromFile("C:user\source\repos\TicketMaker_CS206\TicketMaker_CS206\bin\Debug\Hide.png")
+        btnShowPass.Image = My.Resources.Hide
+
+    End Sub
+
+    Private Sub btnShowPass_Click(sender As Object, e As EventArgs) Handles btnShowPass.Click
+
+    End Sub
+
+    Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
 
     End Sub
 
@@ -121,6 +136,7 @@ Public Class LoginScreen
         If txtPassword.ForeColor = Color.Gray AndAlso txtPassword.Text = "Enter your password" Then
             txtPassword.Text = ""
             txtPassword.ForeColor = Color.Black
+            txtPassword.PasswordChar = "*"
         End If
 
     End Sub
